@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.karageageta.sample.MainActivity">
+    tools:context="com.karageageta.simpleimagepicker.ui.SimpleImagePickerActivity">
 
     <FrameLayout
-        android:id="@+id/content"
+        android:id="@+id/simple_image_picker_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

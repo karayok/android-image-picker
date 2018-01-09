@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SimpleImagePicker</string>
+
+    <string name="text_spinner_album_item">Album</string>
+    <string name="text_album_all_key">All</string>
+    <string name="text_album_all_name">全て</string>
+    <string name="text_permission_denied_external_storage">パーミッションがOFFになっています。</string>
 </resources>
