@@ -20,6 +20,9 @@ import android.widget.AdapterView
 import android.widget.Toast
 import com.karageageta.simpleimagepicker.model.data.Album
 import android.widget.ArrayAdapter
+import com.karageageta.simpleimagepicker.helper.ExtraName
+import com.karageageta.simpleimagepicker.helper.Key
+import com.karageageta.simpleimagepicker.model.data.Config
 import com.karageageta.simpleimagepicker.model.data.Image
 import com.karageageta.simpleimagepicker.model.data.SelectableImage
 import kotlinx.android.synthetic.main.fragment_simple_image_picker.*
@@ -27,6 +30,14 @@ import java.io.File
 
 
 class SimpleImagePickerFragment : Fragment(), AdapterView.OnItemSelectedListener {
+    companion object {
+        fun newInstance(config: Bundle) = SimpleImagePickerFragment().apply {
+            arguments = Bundle().apply {
+                putBundle(ExtraName.CONFIG.name, config)
+            }
+        }
+    }
+
     private enum class Tag { SPINNER_ALBUM, IMAGE }
 
     private val projection = arrayOf(
@@ -37,6 +48,7 @@ class SimpleImagePickerFragment : Fragment(), AdapterView.OnItemSelectedListener
     )
 
     private lateinit var imageAdapter: ImageListRecyclerViewAdapter
+    private val config = Config()
     private var albums = ArrayList<Album>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -50,6 +62,10 @@ class SimpleImagePickerFragment : Fragment(), AdapterView.OnItemSelectedListener
     @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val args = arguments?.getBundle(ExtraName.CONFIG.name)
+        args?.getString(Key.PICKER_ALL_ITEM_NAME.name)?.let { config.pickerAllItemTitle = it }
+        args?.getInt(Key.MIN_COUNT.name)?.let { config.minCount = it }
+        args?.getInt(Key.MAX_COUNT.name)?.let { config.maxCount = it }
 
         if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // TODO : Fix
@@ -61,16 +77,15 @@ class SimpleImagePickerFragment : Fragment(), AdapterView.OnItemSelectedListener
             return
         }
 
+        // TODO : fix for empty
         albums = loadAlbums() as ArrayList<Album>
         val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, albums.map { it.folderName })
         spinner_album.adapter = adapter
-        spinner_album.tag = Tag.SPINNER_ALBUM.name
+        spinner_album.tag = Tag.SPINNER_ALBUM
         spinner_album.onItemSelectedListener = this
 
         recycler_view.layoutManager = GridLayoutManager(context, 3)
         recycler_view.tag = Tag.IMAGE
-        val selectableImages = albums[0].images.map { SelectableImage(it) }
-        imageAdapter.addAll(selectableImages)
         recycler_view.adapter = imageAdapter
     }
 
@@ -88,9 +103,15 @@ class SimpleImagePickerFragment : Fragment(), AdapterView.OnItemSelectedListener
 
     override fun onNothingSelected(adapterView: AdapterView<*>?) {}
 
-    // TODO : implement
     override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
         Toast.makeText(context, albums[position].folderName, Toast.LENGTH_SHORT).show()
+        when (adapterView?.tag) {
+            Tag.SPINNER_ALBUM -> {
+                imageAdapter.clear()
+                val selectableImages = albums[position].images.map { SelectableImage(it) }
+                imageAdapter.addAll(selectableImages)
+            }
+        }
     }
 
 
@@ -106,8 +127,7 @@ class SimpleImagePickerFragment : Fragment(), AdapterView.OnItemSelectedListener
         )
 
         val albumMap = LinkedHashMap<String, Album>()
-        // TODO : fix
-        albumMap.put(getString(R.string.text_album_all_key), Album(getString(R.string.text_album_all_name)))
+        albumMap.put(getString(R.string.text_album_all_key), Album(config.pickerAllItemTitle))
 
         if (cursor!!.moveToLast()) {
             do {

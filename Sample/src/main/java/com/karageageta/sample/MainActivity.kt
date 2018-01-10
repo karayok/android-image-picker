@@ -3,6 +3,7 @@ package com.karageageta.sample
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var fragment: MainFragment
 
