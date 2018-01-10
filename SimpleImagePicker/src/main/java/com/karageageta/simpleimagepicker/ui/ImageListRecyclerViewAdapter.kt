@@ -14,11 +14,11 @@ import java.io.File
 
 class ImageListRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     interface OnItemClickListener {
-        fun onItemClick(parent: ViewGroup, view: View, position: Int) {}
+        fun onItemClick(parent: ViewGroup, view: View, position: Int, item: SelectableImage) {}
     }
 
     interface OnItemLongClickListener {
-        fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int) = false
+        fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: SelectableImage) = false
     }
 
     var onItemClickListener: OnItemClickListener? = null
@@ -30,12 +30,19 @@ class ImageListRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<Recy
     private val requestManager = Glide.with(context)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val itemView = holder.itemView
+
         requestManager
                 .load(File(getItem(position).image.path))
-                .into(holder.itemView.image_thumbnail)
+                .into(itemView.image_thumbnail)
+        if (getItem(position).isSelected) {
+            itemView.view_selected.visibility = View.VISIBLE
+        } else {
+            itemView.view_selected.visibility = View.GONE
+        }
 
-        holder.itemView.setOnClickListener { v -> onItemClickListener?.onItemClick(parent, v, position) }
-        holder.itemView.setOnLongClickListener { v -> onItemLongClickListener?.onItemLongClickListener(parent, v, position) == true }
+        itemView.setOnClickListener { v -> onItemClickListener?.onItemClick(parent, v, position, getItem(position)) }
+        itemView.setOnLongClickListener { v -> onItemLongClickListener?.onItemLongClickListener(parent, v, position, getItem(position)) == true }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -68,8 +75,8 @@ class ImageListRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<Recy
         notifyDataSetChanged()
     }
 
-    fun updateItemView(position: Int, bookmarked: Boolean) {
-        getItem(position).isSelected = bookmarked
+    fun updateItemView(position: Int, isSelected: Boolean) {
+        getItem(position).isSelected = isSelected
         notifyItemChanged(position)
     }
 
