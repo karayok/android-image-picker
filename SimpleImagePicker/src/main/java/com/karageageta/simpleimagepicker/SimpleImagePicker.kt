@@ -2,7 +2,7 @@ package com.karageageta.simpleimagepicker
 
 import android.app.Activity
 import android.os.Bundle
-import com.karageageta.simpleimagepicker.ui.SimpleImagePickerActivity
+import com.karageageta.simpleimagepicker.ui.main.SimpleImagePickerActivity
 import android.content.Intent
 import com.karageageta.simpleimagepicker.helper.ExtraName
 import com.karageageta.simpleimagepicker.helper.Key

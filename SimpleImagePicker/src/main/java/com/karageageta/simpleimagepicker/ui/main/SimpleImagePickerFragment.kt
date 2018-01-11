@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui
+package com.karageageta.simpleimagepicker.ui.main
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -6,22 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 
 import com.karageageta.simpleimagepicker.R
 import android.content.pm.PackageManager
 import com.karageageta.simpleimagepicker.helper.RequestCode
-import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.view.MenuItem
+import android.view.*
 import android.widget.AdapterView
 import android.widget.Toast
-import com.karageageta.simpleimagepicker.model.data.Album
 import android.widget.ArrayAdapter
 import com.karageageta.simpleimagepicker.helper.ExtraName
 import com.karageageta.simpleimagepicker.helper.Key
@@ -30,10 +25,10 @@ import com.karageageta.simpleimagepicker.model.data.Image
 import com.karageageta.simpleimagepicker.model.data.SelectableImage
 import com.karageageta.simpleimagepicker.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_simple_image_picker.*
-import java.io.File
 
 
 class SimpleImagePickerFragment : Fragment(),
+        SimpleImagePickerContract.View,
         AdapterView.OnItemSelectedListener,
         ImageListRecyclerViewAdapter.OnItemClickListener,
         ImageListRecyclerViewAdapter.OnItemLongClickListener {
@@ -48,15 +43,9 @@ class SimpleImagePickerFragment : Fragment(),
     private enum class Tag { SPINNER_ALBUM, IMAGE }
 
     private val config = Config()
-    private val projection = arrayOf(
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.DATA,
-            MediaStore.Images.Media.BUCKET_DISPLAY_NAME
-    )
 
     private lateinit var imageAdapter: ImageListRecyclerViewAdapter
-    private var albums = ArrayList<Album>()
+    private lateinit var presenter: SimpleImagePickerPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
             = inflater.inflate(R.layout.fragment_simple_image_picker, container, false)
@@ -64,6 +53,7 @@ class SimpleImagePickerFragment : Fragment(),
     override fun onAttach(context: Context) {
         super.onAttach(context)
         imageAdapter = ImageListRecyclerViewAdapter(context)
+        presenter = SimpleImagePickerPresenter(this, context)
     }
 
     @SuppressLint("Recycle")
@@ -85,8 +75,8 @@ class SimpleImagePickerFragment : Fragment(),
         }
 
         // TODO : fix for empty
-        albums = loadAlbums() as ArrayList<Album>
-        spinner_album.adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, albums.map { it.folderName })
+        presenter.loadAlbums(config.pickerAllItemTitle)
+        spinner_album.adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, presenter.albums().map { it.folderName })
         spinner_album.tag = Tag.SPINNER_ALBUM
         spinner_album.onItemSelectedListener = this
 
@@ -100,7 +90,7 @@ class SimpleImagePickerFragment : Fragment(),
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == RequestCode.PICK_IMAGE.rawValue) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                albums = loadAlbums() as ArrayList<Album>
+                presenter.loadAlbums(config.pickerAllItemTitle)
             }
             return
         }
@@ -109,10 +99,21 @@ class SimpleImagePickerFragment : Fragment(),
 
     override fun onNothingSelected(adapterView: AdapterView<*>?) {}
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.menu_simple_image_picker, menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            activity?.finish()
-            return true
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+            R.id.finish -> {
+                presenter.saveSelected()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -121,12 +122,7 @@ class SimpleImagePickerFragment : Fragment(),
 
     override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
         when (adapterView?.tag) {
-            Tag.SPINNER_ALBUM -> {
-                imageAdapter.clear()
-                recycler_view.smoothScrollToPosition(0)
-                val selectableImages = albums[position].images.map { SelectableImage(it) }
-                imageAdapter.addAll(selectableImages)
-            }
+            Tag.SPINNER_ALBUM -> presenter.albumSelected(position)
         }
     }
 
@@ -154,57 +150,31 @@ class SimpleImagePickerFragment : Fragment(),
         }
     }
 
-    // private
+    // SimpleImagePickerContract.View
 
-    private fun loadAlbums(): List<Album> {
-        val cursor = context?.contentResolver?.query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection,
-                null,
-                null,
-                MediaStore.Images.Media.DATE_ADDED
-        )
-
-        val albumMap = LinkedHashMap<String, Album>()
-        albumMap.put(getString(R.string.text_album_all_key), Album(config.pickerAllItemTitle))
-
-        if (cursor!!.moveToLast()) {
-            do {
-                val id = cursor.getLong(cursor.getColumnIndex(projection[0]))
-                val name = cursor.getString(cursor.getColumnIndex(projection[1]))
-                val path = cursor.getString(cursor.getColumnIndex(projection[2]))
-                val bucket = cursor.getString(cursor.getColumnIndex(projection[3]))
-
-                val file = createValidFile(path)
-                if (file != null && file.exists()) {
-                    if (albumMap[bucket] == null) {
-                        albumMap.put(bucket, Album(bucket))
-                    }
-                    albumMap[getString(R.string.text_album_all_key)]?.images?.add(Image(id, name, path))
-                    albumMap[bucket]?.images?.add(Image(id, name, path))
-                }
-            } while (cursor.moveToPrevious())
-        }
-        cursor.close()
-
-        return albumMap.values.toList()
+    override fun scrollToTop() {
+        recycler_view.smoothScrollToPosition(0)
     }
+
+    override fun clearImages() {
+        imageAdapter.clear()
+    }
+
+    override fun addImages(items: List<Image>) {
+        imageAdapter.addAll(items.map { SelectableImage(it) })
+    }
+
+
+    override fun finish() {
+        activity?.finish()
+    }
+
+    // private
 
     private fun initConfig() {
         val args = arguments?.getBundle(ExtraName.CONFIG.name)
         args?.getString(Key.PICKER_ALL_ITEM_NAME.name)?.let { config.pickerAllItemTitle = it }
         args?.getInt(Key.MIN_COUNT.name)?.let { config.minCount = it }
         args?.getInt(Key.MAX_COUNT.name)?.let { config.maxCount = it }
-    }
-
-    private fun createValidFile(path: String): File? {
-        if (path.isEmpty()) {
-            return null
-        }
-        return try {
-            File(path)
-        } catch (e: Exception) {
-            null
-        }
     }
 }

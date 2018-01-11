@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui
+package com.karageageta.simpleimagepicker.ui.main
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_image.view.*
 import java.io.File
 
 
-class ImageListRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     interface OnItemClickListener {
         fun onItemClick(parent: ViewGroup, view: View, position: Int, item: SelectableImage) {}
     }
@@ -27,12 +27,11 @@ class ImageListRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<Recy
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val items = ArrayList<SelectableImage>()
-    private val requestManager = Glide.with(context)
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemView = holder.itemView
 
-        requestManager
+        Glide.with(context)
                 .load(File(getItem(position).image.path))
                 .into(itemView.image_thumbnail)
         if (getItem(position).isSelected) {
@@ -56,10 +55,6 @@ class ImageListRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<Recy
 
     // Public
 
-    fun getPosition(item: SelectableImage): Int {
-        return items.indexOf(item)
-    }
-
     fun clear() {
         items.clear()
         notifyDataSetChanged()
@@ -80,9 +75,7 @@ class ImageListRecyclerViewAdapter(context: Context) : RecyclerView.Adapter<Recy
         notifyItemChanged(position)
     }
 
-    // private
-
-    private fun getItem(position: Int): SelectableImage {
+    fun getItem(position: Int): SelectableImage {
         return items[position]
     }
 

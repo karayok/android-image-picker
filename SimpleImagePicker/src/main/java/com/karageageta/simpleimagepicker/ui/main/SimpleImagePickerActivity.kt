@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui
+package com.karageageta.simpleimagepicker.ui.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
