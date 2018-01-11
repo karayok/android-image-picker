@@ -7,8 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.karageageta.simpleimagepicker.SimpleImagePicker
 import kotlinx.android.synthetic.main.fragment_main.*
+import com.bumptech.glide.Glide
+import com.karageageta.sample.helper.ExtraName
+import java.io.File
 
 class MainFragment : Fragment(), View.OnClickListener {
+    companion object {
+        fun newInstance(path: Array<String>? = null) = MainFragment().apply {
+            arguments = Bundle().apply {
+                putStringArray(ExtraName.IMAGES.name, path)
+            }
+        }
+    }
+
     private enum class Tag { PICK_IMAGE }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
@@ -19,6 +30,13 @@ class MainFragment : Fragment(), View.OnClickListener {
 
         button_pick_image.tag = Tag.PICK_IMAGE.name
         button_pick_image.setOnClickListener(this)
+
+        arguments?.getStringArray(ExtraName.IMAGES.name)?.let {
+            image.visibility = View.VISIBLE
+            Glide.with(context)
+                    .load(File(it[0]))
+                    .into(image)
+        }
     }
 
     override fun onClick(view: View?) {

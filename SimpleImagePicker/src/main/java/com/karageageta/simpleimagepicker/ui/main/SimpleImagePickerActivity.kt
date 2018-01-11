@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.karageageta.simpleimagepicker.R
 import com.karageageta.simpleimagepicker.helper.ExtraName
 
-
 class SimpleImagePickerActivity : AppCompatActivity() {
     private lateinit var fragment: SimpleImagePickerFragment
 

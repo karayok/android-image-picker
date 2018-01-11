@@ -2,6 +2,7 @@ package com.karageageta.simpleimagepicker.ui.main
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -22,10 +23,8 @@ import com.karageageta.simpleimagepicker.helper.ExtraName
 import com.karageageta.simpleimagepicker.helper.Key
 import com.karageageta.simpleimagepicker.model.data.Config
 import com.karageageta.simpleimagepicker.model.data.Image
-import com.karageageta.simpleimagepicker.model.data.SelectableImage
 import com.karageageta.simpleimagepicker.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_simple_image_picker.*
-
 
 class SimpleImagePickerFragment : Fragment(),
         SimpleImagePickerContract.View,
@@ -111,7 +110,7 @@ class SimpleImagePickerFragment : Fragment(),
                 return true
             }
             R.id.finish -> {
-                presenter.saveSelected()
+                presenter.saveSelected(imageAdapter.selectedImages())
                 return true
             }
         }
@@ -128,11 +127,11 @@ class SimpleImagePickerFragment : Fragment(),
 
     // ImageListRecyclerViewAdapter.OnItemClickListener
 
-    override fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: SelectableImage): Boolean {
+    override fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image): Boolean {
         when (parent.tag) {
             Tag.IMAGE -> {
                 val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra(ExtraName.IMAGE_PATH.name, item.image.path)
+                intent.putExtra(ExtraName.IMAGE_PATH.name, item.path)
                 startActivity(intent)
                 return true
             }
@@ -142,10 +141,10 @@ class SimpleImagePickerFragment : Fragment(),
 
     // ImageListRecyclerViewAdapter.OnItemLongClickListener
 
-    override fun onItemClick(parent: ViewGroup, view: View, position: Int, item: SelectableImage) {
+    override fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image) {
         when (parent.tag) {
             Tag.IMAGE -> {
-                imageAdapter.updateItemView(position, !item.isSelected)
+                imageAdapter.updateItemView(position)
             }
         }
     }
@@ -161,9 +160,14 @@ class SimpleImagePickerFragment : Fragment(),
     }
 
     override fun addImages(items: List<Image>) {
-        imageAdapter.addAll(items.map { SelectableImage(it) })
+        imageAdapter.addAll(items)
     }
 
+    override fun finishPickImages(items: List<Image>) {
+        val intent = Intent()
+        intent.putExtra(ExtraName.PICKED_IMAGE.name, items.map { it.path }.toTypedArray())
+        activity?.setResult(RESULT_OK, intent)
+    }
 
     override fun finish() {
         activity?.finish()

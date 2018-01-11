@@ -26,9 +26,11 @@ class SimpleImagePickerPresenter(
         view?.addImages(albums.values.toList()[position].images)
     }
 
-
-    override fun saveSelected() {
-        // TODO : implement
+    override fun saveSelected(items: List<Image>) {
+        if (items.isNotEmpty()) {
+            view?.finishPickImages(items)
+        }
+        view?.finish()
     }
 
     override fun loadAlbums(pickerAllItemTitle: String) {
@@ -76,5 +78,4 @@ class SimpleImagePickerPresenter(
             null
         }
     }
-
 }

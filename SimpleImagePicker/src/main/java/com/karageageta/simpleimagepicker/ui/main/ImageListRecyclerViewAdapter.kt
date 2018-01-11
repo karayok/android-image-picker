@@ -7,35 +7,37 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.karageageta.simpleimagepicker.R
-import com.karageageta.simpleimagepicker.model.data.SelectableImage
+import com.karageageta.simpleimagepicker.model.data.Image
 import kotlinx.android.synthetic.main.item_image.view.*
 import java.io.File
 
-
 class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     interface OnItemClickListener {
-        fun onItemClick(parent: ViewGroup, view: View, position: Int, item: SelectableImage) {}
+        fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image) {}
     }
 
     interface OnItemLongClickListener {
-        fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: SelectableImage) = false
+        fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image) = false
     }
 
     var onItemClickListener: OnItemClickListener? = null
     var onItemLongClickListener: OnItemLongClickListener? = null
     private lateinit var parent: ViewGroup
+    private val selectedImages = ArrayList<Image>()
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private val items = ArrayList<SelectableImage>()
+    private val items = ArrayList<Image>()
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemView = holder.itemView
+        val item = getItem(position)
 
         Glide.with(context)
-                .load(File(getItem(position).image.path))
+                .load(File(item.path))
                 .into(itemView.image_thumbnail)
-        if (getItem(position).isSelected) {
+        if (selectedImages.contains(item)) {
             itemView.view_selected.visibility = View.VISIBLE
+            itemView.text_index.text = (selectedImages.indexOf(item) + 1).toString()
         } else {
             itemView.view_selected.visibility = View.GONE
         }
@@ -60,25 +62,43 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
         notifyDataSetChanged()
     }
 
-    fun addAll(items: List<SelectableImage>) {
+    fun addAll(items: List<Image>) {
         this.items.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun add(item: SelectableImage) {
+    fun add(item: Image) {
         this.items.add(item)
         notifyDataSetChanged()
     }
 
-    fun updateItemView(position: Int, isSelected: Boolean) {
-        getItem(position).isSelected = isSelected
+    fun updateItemView(position: Int) {
+        if (selectedImages.contains(getItem(position))) {
+            unSelectItem(position)
+            return
+        }
+        selectItem(position)
+    }
+
+    fun selectedImages(): List<Image> {
+        return selectedImages
+    }
+
+    // private
+
+    private fun selectItem(position: Int) {
+        selectedImages.add(getItem(position))
         notifyItemChanged(position)
     }
 
-    fun getItem(position: Int): SelectableImage {
-        return items[position]
+    private fun unSelectItem(position: Int) {
+        selectedImages.remove(getItem(position))
+        notifyDataSetChanged()
     }
 
+    private fun getItem(position: Int): Image {
+        return items[position]
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }

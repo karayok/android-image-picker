@@ -8,7 +8,6 @@ import com.karageageta.simpleimagepicker.helper.ExtraName
 import com.karageageta.simpleimagepicker.helper.Key
 import com.karageageta.simpleimagepicker.helper.RequestCode
 
-
 class SimpleImagePicker {
     // TODO : action bar color , HomeAsUpIndicator
     class Builder(private var activity: Activity) {
