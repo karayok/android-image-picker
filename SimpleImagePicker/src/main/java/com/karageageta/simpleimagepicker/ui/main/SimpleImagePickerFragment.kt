@@ -73,7 +73,6 @@ class SimpleImagePickerFragment : Fragment(),
             return
         }
 
-        // TODO : fix for empty
         presenter.loadAlbums(config.pickerAllItemTitle)
         spinner_album.adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, presenter.albums().map { it.folderName })
         spinner_album.tag = Tag.SPINNER_ALBUM
@@ -84,6 +83,7 @@ class SimpleImagePickerFragment : Fragment(),
         imageAdapter.onItemClickListener = this
         imageAdapter.onItemLongClickListener = this
         recycler_view.adapter = imageAdapter
+        recycler_view.emptyView = empty
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

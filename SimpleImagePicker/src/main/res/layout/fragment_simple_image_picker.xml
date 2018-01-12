@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.karageageta.simpleimagepicker.ui.SimpleImagePickerFragment">
+    tools:context="com.karageageta.simpleimagepicker.ui.main.SimpleImagePickerFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,10 +17,28 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_medium" />
 
-        <android.support.v7.widget.RecyclerView
+        <com.karageageta.simpleimagepicker.helper.EmptySupportedRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/spinner_album" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/empty"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_no_image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+        </android.support.constraint.ConstraintLayout>
     </RelativeLayout>
 </FrameLayout>
