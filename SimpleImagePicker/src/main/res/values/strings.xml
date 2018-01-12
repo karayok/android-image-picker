@@ -3,7 +3,7 @@
 
     <string name="text_spinner_album_item">Album</string>
     <string name="text_album_all_key">all</string>
-    <string name="text_permission_denied_external_storage">パーミッションがOFFになっています。</string>
+    <string name="text_permission_denied_external_storage">Please grant the permission to show media.</string>
 
     <string name="menu_item_finish">Finish</string>
 </resources>

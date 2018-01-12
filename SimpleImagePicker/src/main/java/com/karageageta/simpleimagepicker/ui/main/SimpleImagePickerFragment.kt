@@ -17,14 +17,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import android.widget.AdapterView
-import android.widget.Toast
 import android.widget.ArrayAdapter
 import com.karageageta.simpleimagepicker.helper.ExtraName
-import com.karageageta.simpleimagepicker.helper.Key
+import com.karageageta.simpleimagepicker.model.data.Album
 import com.karageageta.simpleimagepicker.model.data.Config
 import com.karageageta.simpleimagepicker.model.data.Image
 import com.karageageta.simpleimagepicker.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_simple_image_picker.*
+import java.io.Serializable
 
 class SimpleImagePickerFragment : Fragment(),
         SimpleImagePickerContract.View,
@@ -32,17 +32,20 @@ class SimpleImagePickerFragment : Fragment(),
         ImageListRecyclerViewAdapter.OnItemClickListener,
         ImageListRecyclerViewAdapter.OnItemLongClickListener {
     companion object {
-        fun newInstance(config: Bundle) = SimpleImagePickerFragment().apply {
+        fun newInstance(config: Serializable) = SimpleImagePickerFragment().apply {
             arguments = Bundle().apply {
-                putBundle(ExtraName.CONFIG.name, config)
+                putSerializable(ExtraName.CONFIG.name, config)
             }
         }
     }
 
     private enum class Tag { SPINNER_ALBUM, IMAGE }
 
-    private val config = Config()
+    private val config: Config by lazy {
+        arguments?.getSerializable(ExtraName.CONFIG.name) as Config
+    }
 
+    private lateinit var albumAdapter: ArrayAdapter<String>
     private lateinit var imageAdapter: ImageListRecyclerViewAdapter
     private lateinit var presenter: SimpleImagePickerPresenter
 
@@ -51,52 +54,51 @@ class SimpleImagePickerFragment : Fragment(),
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        albumAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item)
         imageAdapter = ImageListRecyclerViewAdapter(context)
-        presenter = SimpleImagePickerPresenter(this, context)
+        presenter = SimpleImagePickerPresenter(this, context, config)
     }
 
     @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initConfig()
 
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO : Fix
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                Toast.makeText(context, R.string.text_permission_denied_external_storage, Toast.LENGTH_SHORT).show()
-            } else {
-                ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), RequestCode.PICK_IMAGE.rawValue)
-            }
-            return
-        }
-
-        presenter.loadAlbums(config.pickerAllItemTitle)
-        spinner_album.adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item, presenter.albums().map { it.folderName })
+        spinner_album.adapter = albumAdapter
         spinner_album.tag = Tag.SPINNER_ALBUM
         spinner_album.onItemSelectedListener = this
 
         recycler_view.layoutManager = GridLayoutManager(context, 3)
         recycler_view.tag = Tag.IMAGE
+        recycler_view.adapter = imageAdapter
         imageAdapter.onItemClickListener = this
         imageAdapter.onItemLongClickListener = this
-        recycler_view.adapter = imageAdapter
-        recycler_view.emptyView = empty
-    }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == RequestCode.PICK_IMAGE.rawValue) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                presenter.loadAlbums(config.pickerAllItemTitle)
+        // empty view
+        recycler_view.emptyView = view_empty
+        config.noImage?.let { image_empty.setImageDrawable(config.noImage) }
+
+        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                showPermissionDenied()
+                return
             }
+            ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), RequestCode.PICK_IMAGE.rawValue)
             return
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
-    override fun onNothingSelected(adapterView: AdapterView<*>?) {}
+    override fun onResume() {
+        super.onResume()
+        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            showPermissionDenied()
+            return
+        }
+        showImages()
+        presenter.load()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -124,6 +126,8 @@ class SimpleImagePickerFragment : Fragment(),
             Tag.SPINNER_ALBUM -> presenter.albumSelected(position)
         }
     }
+
+    override fun onNothingSelected(adapterView: AdapterView<*>?) {}
 
     // ImageListRecyclerViewAdapter.OnItemClickListener
 
@@ -155,12 +159,33 @@ class SimpleImagePickerFragment : Fragment(),
         recycler_view.smoothScrollToPosition(0)
     }
 
+    override fun clearAlbums() {
+        albumAdapter.clear()
+    }
+
+    override fun addAlbums(items: List<Album>) {
+        albumAdapter.addAll(items.map { it.folderName })
+        albumAdapter.notifyDataSetChanged()
+    }
+
     override fun clearImages() {
         imageAdapter.clear()
     }
 
     override fun addImages(items: List<Image>) {
         imageAdapter.addAll(items)
+    }
+
+    override fun showImages() {
+        view_permission_denied.visibility = View.GONE
+    }
+
+    override fun showPermissionDenied() {
+        view_permission_denied.visibility = View.VISIBLE
+
+        config.noPermission?.let { image_permission_denied.setImageDrawable(config.noPermission) }
+        text_permission_denied.visibility = if (config.disableNoPermissionText) View.GONE else View.VISIBLE
+        config.noPermissionText?.let { image_permission_denied.setImageDrawable(config.noPermission) }
     }
 
     override fun finishPickImages(items: List<Image>) {
@@ -171,14 +196,5 @@ class SimpleImagePickerFragment : Fragment(),
 
     override fun finish() {
         activity?.finish()
-    }
-
-    // private
-
-    private fun initConfig() {
-        val args = arguments?.getBundle(ExtraName.CONFIG.name)
-        args?.getString(Key.PICKER_ALL_ITEM_NAME.name)?.let { config.pickerAllItemTitle = it }
-        args?.getInt(Key.MIN_COUNT.name)?.let { config.minCount = it }
-        args?.getInt(Key.MAX_COUNT.name)?.let { config.maxCount = it }
     }
 }

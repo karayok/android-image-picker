@@ -20,7 +20,7 @@ class MainFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private enum class Tag { PICK_IMAGE }
+    private enum class Tag { CHOOSE_IMAGE }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
             = inflater.inflate(R.layout.fragment_main, container, false)
@@ -28,7 +28,7 @@ class MainFragment : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button_pick_image.tag = Tag.PICK_IMAGE.name
+        button_pick_image.tag = Tag.CHOOSE_IMAGE
         button_pick_image.setOnClickListener(this)
 
         arguments?.getStringArray(ExtraName.IMAGES.name)?.let {
@@ -41,11 +41,11 @@ class MainFragment : Fragment(), View.OnClickListener {
 
     override fun onClick(view: View?) {
         when (view?.tag) {
-            Tag.PICK_IMAGE.name -> {
+            Tag.CHOOSE_IMAGE -> {
                 activity?.let {
                     SimpleImagePicker
                             .Builder(it)
-                            .pickerAllItemTitle("全部")
+                            .pickerAllItemTitle(getString(R.string.text_all))
                             .start()
                 }
             }

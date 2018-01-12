@@ -24,10 +24,12 @@
             android:layout_below="@id/spinner_album" />
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/empty"
-            android:visibility="gone"
+            android:id="@+id/view_empty"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/spinner_album"
+            android:background="@android:color/white"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/image_empty"
@@ -41,4 +43,42 @@
                 tools:ignore="ContentDescription" />
         </android.support.constraint.ConstraintLayout>
     </RelativeLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/view_permission_denied"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_permission_denied"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_no_permission"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/text_permission_denied"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:text="@string/text_permission_denied_external_storage"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image_permission_denied" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>
