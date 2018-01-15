@@ -3,6 +3,7 @@ package com.karageageta.simpleimagepicker.ui.main
 import android.content.Context
 import android.provider.MediaStore
 import com.karageageta.simpleimagepicker.R
+import com.karageageta.simpleimagepicker.extension.createValidFile
 import com.karageageta.simpleimagepicker.model.data.Album
 import com.karageageta.simpleimagepicker.model.data.Config
 import com.karageageta.simpleimagepicker.model.data.Image
@@ -33,19 +34,6 @@ class SimpleImagePickerPresenter(
         view?.addImages(albums.values.toList()[0].images)
     }
 
-    override fun albumSelected(position: Int) {
-        view?.clearImages()
-        view?.scrollToTop()
-        view?.addImages(albums.values.toList()[position].images)
-    }
-
-    override fun saveSelected(items: List<Image>) {
-        if (items.isNotEmpty()) {
-            view?.finishPickImages(items)
-        }
-        view?.finish()
-    }
-
     override fun loadAlbums() {
         val cursor = context?.contentResolver?.query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -64,7 +52,7 @@ class SimpleImagePickerPresenter(
                 val path = cursor.getString(cursor.getColumnIndex(projection[2]))
                 val bucket = cursor.getString(cursor.getColumnIndex(projection[3]))
 
-                val file = createValidFile(path)
+                val file = File(path).createValidFile()
                 if (file != null && file.exists()) {
                     if (albums[bucket] == null) {
                         albums.put(bucket, Album(bucket))
@@ -81,14 +69,24 @@ class SimpleImagePickerPresenter(
         return albums.values.toList()
     }
 
-    override fun createValidFile(path: String): File? {
-        if (path.isEmpty()) {
-            return null
+    override fun albumSelected(position: Int) {
+        view?.clearImages()
+        view?.scrollToTop()
+        view?.addImages(albums.values.toList()[position].images)
+    }
+
+    override fun saveSelected(items: List<Image>) {
+        if (items.isNotEmpty()) {
+            view?.finishPickImages(items)
         }
-        return try {
-            File(path)
-        } catch (e: Exception) {
-            null
+        view?.finish()
+    }
+
+    override fun permissionDenied() {
+        if (config.finishWhenPermissionDenied) {
+            view?.finish()
+            return
         }
+        view?.showPermissionDenied()
     }
 }

@@ -82,7 +82,7 @@ class SimpleImagePickerFragment : Fragment(),
 
         if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             if (!ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                showPermissionDenied()
+                presenter.permissionDenied()
                 return
             }
             ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), RequestCode.PICK_IMAGE.rawValue)
@@ -93,7 +93,7 @@ class SimpleImagePickerFragment : Fragment(),
     override fun onResume() {
         super.onResume()
         if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            showPermissionDenied()
+            presenter.permissionDenied()
             return
         }
         showImages()

@@ -20,10 +20,10 @@ interface SimpleImagePickerContract {
 
     interface Presenter<out T : BaseContract.View> : BaseContract.Presenter<T> {
         fun load()
-        fun albumSelected(position: Int)
-        fun saveSelected(items: List<Image>)
         fun loadAlbums()
         fun albums(): List<Album>
-        fun createValidFile(path: String): File?
+        fun albumSelected(position: Int)
+        fun saveSelected(items: List<Image>)
+        fun permissionDenied()
     }
 }
