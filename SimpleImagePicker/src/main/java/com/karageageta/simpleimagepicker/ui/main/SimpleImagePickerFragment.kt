@@ -9,11 +9,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 
 import com.karageageta.simpleimagepicker.R
-import android.content.pm.PackageManager
 import com.karageageta.simpleimagepicker.helper.RequestCode
 import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import android.widget.AdapterView
@@ -64,7 +61,6 @@ class SimpleImagePickerFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
 
         setHasOptionsMenu(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         spinner_album.adapter = albumAdapter
         spinner_album.tag = Tag.SPINNER_ALBUM
@@ -79,25 +75,11 @@ class SimpleImagePickerFragment : Fragment(),
         // empty view
         recycler_view.emptyView = view_empty
         config.noImage?.let { image_empty.setImageDrawable(config.noImage) }
-
-        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                presenter.permissionDenied()
-                return
-            }
-            ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), RequestCode.PICK_IMAGE.rawValue)
-            return
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            presenter.permissionDenied()
-            return
-        }
-        showImages()
-        presenter.load()
+        presenter.resume()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -107,12 +89,8 @@ class SimpleImagePickerFragment : Fragment(),
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
             R.id.finish -> {
-                presenter.saveSelected(imageAdapter.selectedImages())
+                presenter.saveSelected(imageAdapter.getSelectedImages())
                 return true
             }
         }
@@ -186,6 +164,14 @@ class SimpleImagePickerFragment : Fragment(),
         config.noPermission?.let { image_permission_denied.setImageDrawable(config.noPermission) }
         text_permission_denied.visibility = if (config.disableNoPermissionText) View.GONE else View.VISIBLE
         config.noPermissionText?.let { image_permission_denied.setImageDrawable(config.noPermission) }
+    }
+
+    override fun requestPermissions() {
+        activity?.let {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(it, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), RequestCode.PICK_IMAGE.rawValue)
+            }
+        }
     }
 
     override fun finishPickImages(items: List<Image>) {

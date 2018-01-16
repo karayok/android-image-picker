@@ -3,7 +3,6 @@ package com.karageageta.simpleimagepicker.ui.main
 import com.karageageta.simpleimagepicker.model.data.Album
 import com.karageageta.simpleimagepicker.model.data.Image
 import com.karageageta.simpleimagepicker.ui.BaseContract
-import java.io.File
 
 interface SimpleImagePickerContract {
     interface View : BaseContract.View {
@@ -14,16 +13,15 @@ interface SimpleImagePickerContract {
         fun addImages(items: List<Image>)
         fun showImages()
         fun showPermissionDenied()
+        fun requestPermissions()
         fun finishPickImages(items: List<Image>)
         fun finish()
     }
 
     interface Presenter<out T : BaseContract.View> : BaseContract.Presenter<T> {
-        fun load()
-        fun loadAlbums()
+        fun resume()
         fun albums(): List<Album>
         fun albumSelected(position: Int)
         fun saveSelected(items: List<Image>)
-        fun permissionDenied()
     }
 }

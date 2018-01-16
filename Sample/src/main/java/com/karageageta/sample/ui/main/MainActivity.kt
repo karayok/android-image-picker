@@ -1,8 +1,9 @@
-package com.karageageta.sample
+package com.karageageta.sample.ui.main
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.karageageta.sample.R
 import com.karageageta.simpleimagepicker.helper.ExtraName
 import com.karageageta.simpleimagepicker.helper.RequestCode
 
@@ -22,11 +23,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RequestCode.PICK_IMAGE.rawValue && resultCode == RESULT_OK && data != null) {
-            val images = data.getStringArrayExtra(ExtraName.PICKED_IMAGE.name)
-            fragment = MainFragment.newInstance(images)
-            supportFragmentManager.beginTransaction().add(R.id.content, fragment).commit()
+            val images = data.getStringArrayExtra(ExtraName.PICKED_IMAGE.name).toList()
+            // TODO : fix (use dagger)
+            fragment.presenter.imagesSelected(images)
         }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

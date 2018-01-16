@@ -28,6 +28,11 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val items = ArrayList<Image>()
 
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+        this.parent = parent!!
+        return ViewHolder(inflater.inflate(R.layout.item_image, parent, false))
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemView = holder.itemView
         val item = getItem(position)
@@ -44,11 +49,6 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
 
         itemView.setOnClickListener { v -> onItemClickListener?.onItemClick(parent, v, position, getItem(position)) }
         itemView.setOnLongClickListener { v -> onItemLongClickListener?.onItemLongClickListener(parent, v, position, getItem(position)) == true }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        this.parent = parent!!
-        return ViewHolder(inflater.inflate(R.layout.item_image, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -74,27 +74,19 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
 
     fun updateItemView(position: Int) {
         if (selectedImages.contains(getItem(position))) {
-            unSelectItem(position)
+            selectedImages.remove(getItem(position))
+            notifyDataSetChanged()
             return
         }
-        selectItem(position)
-    }
-
-    fun selectedImages(): List<Image> {
-        return selectedImages
-    }
-
-    // private
-
-    private fun selectItem(position: Int) {
         selectedImages.add(getItem(position))
         notifyItemChanged(position)
     }
 
-    private fun unSelectItem(position: Int) {
-        selectedImages.remove(getItem(position))
-        notifyDataSetChanged()
+    fun getSelectedImages(): List<Image> {
+        return selectedImages
     }
+
+    // private
 
     private fun getItem(position: Int): Image {
         return items[position]

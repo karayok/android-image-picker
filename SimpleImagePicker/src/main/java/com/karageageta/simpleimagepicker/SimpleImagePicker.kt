@@ -49,11 +49,6 @@ class SimpleImagePicker {
             return this
         }
 
-        fun finishWhenPermissionDenied(finish: Boolean): Builder {
-            config.finishWhenPermissionDenied = finish
-            return this
-        }
-
         fun start() {
             val intent = Intent(activity, SimpleImagePickerActivity::class.java)
             intent.putExtra(ExtraName.CONFIG.name, config as Serializable)

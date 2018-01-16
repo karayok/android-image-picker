@@ -14,7 +14,7 @@ class EmptySupportedRecyclerView @JvmOverloads constructor(
 
     private val emptyObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onChanged() {
-            if (adapter == null && emptyView == null) {
+            if (adapter == null || emptyView == null) {
                 return
             }
 

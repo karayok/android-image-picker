@@ -10,6 +10,5 @@ data class Config(
         var noImage: Drawable? = null,
         var noPermission: Drawable? = null,
         var noPermissionText: String? = null,
-        var disableNoPermissionText: Boolean = false,
-        var finishWhenPermissionDenied: Boolean = false
+        var disableNoPermissionText: Boolean = false
 ) : Serializable
