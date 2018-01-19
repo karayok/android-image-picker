@@ -19,11 +19,6 @@ class SimpleImagePicker {
             return this
         }
 
-        fun minCount(count: Int): Builder {
-            config.minCount = count
-            return this
-        }
-
         fun maxCount(count: Int): Builder {
             config.maxCount = count
             return this
@@ -44,15 +39,10 @@ class SimpleImagePicker {
             return this
         }
 
-        fun disablePermissionText(disable: Boolean): Builder {
-            config.disableNoPermissionText = disable
-            return this
-        }
-
         fun start() {
-            val intent = Intent(activity, SimpleImagePickerActivity::class.java)
-            intent.putExtra(ExtraName.CONFIG.name, config as Serializable)
-            activity.startActivityForResult(intent, RequestCode.PICK_IMAGE.rawValue)
+            Intent(activity, SimpleImagePickerActivity::class.java)
+                    .apply { putExtra(ExtraName.CONFIG.name, config as Serializable) }
+                    .let { activity.startActivityForResult(it, RequestCode.PICK_IMAGE.rawValue) }
         }
     }
 }

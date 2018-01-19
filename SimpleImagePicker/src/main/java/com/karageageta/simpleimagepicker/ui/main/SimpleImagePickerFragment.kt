@@ -62,19 +62,24 @@ class SimpleImagePickerFragment : Fragment(),
 
         setHasOptionsMenu(true)
 
-        spinner_album.adapter = albumAdapter
-        spinner_album.tag = Tag.SPINNER_ALBUM
-        spinner_album.onItemSelectedListener = this
-
-        recycler_view.layoutManager = GridLayoutManager(context, 3)
-        recycler_view.tag = Tag.IMAGE
-        recycler_view.adapter = imageAdapter
-        imageAdapter.onItemClickListener = this
-        imageAdapter.onItemLongClickListener = this
-
-        // empty view
-        recycler_view.emptyView = view_empty
+        spinner_album.also {
+            it.adapter = albumAdapter
+            it.tag = Tag.SPINNER_ALBUM
+            it.onItemSelectedListener = this
+        }
+        recycler_view.also {
+            it.layoutManager = GridLayoutManager(this.context, 3)
+            it.tag = Tag.IMAGE
+            it.adapter = imageAdapter
+            it.emptyView = view_empty
+        }
         config.noImage?.let { image_empty.setImageDrawable(config.noImage) }
+
+        imageAdapter.also {
+            it.onItemClickListener = this
+            it.onItemLongClickListener = this
+        }
+
     }
 
     override fun onResume() {
@@ -107,28 +112,30 @@ class SimpleImagePickerFragment : Fragment(),
 
     override fun onNothingSelected(adapterView: AdapterView<*>?) {}
 
-    // ImageListRecyclerViewAdapter.OnItemClickListener
+    // ImageListRecyclerViewAdapter.OnItemLongClickListener
 
-    override fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image): Boolean {
+    override fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean) {
         when (parent.tag) {
             Tag.IMAGE -> {
-                val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra(ExtraName.IMAGE_PATH.name, item.path)
-                startActivity(intent)
+                if (!selectable) return
+                imageAdapter.updateItemView(position, config.maxCount)
+            }
+        }
+    }
+
+    // ImageListRecyclerViewAdapter.OnItemClickListener
+
+    override fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean): Boolean {
+        when (parent.tag) {
+            Tag.IMAGE -> {
+                if (!selectable) return false
+                Intent(context, DetailActivity::class.java)
+                        .apply { putExtra(ExtraName.IMAGE_PATH.name, item.path) }
+                        .let { startActivity(it) }
                 return true
             }
         }
         return false
-    }
-
-    // ImageListRecyclerViewAdapter.OnItemLongClickListener
-
-    override fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image) {
-        when (parent.tag) {
-            Tag.IMAGE -> {
-                imageAdapter.updateItemView(position)
-            }
-        }
     }
 
     // SimpleImagePickerContract.View
@@ -162,7 +169,6 @@ class SimpleImagePickerFragment : Fragment(),
         view_permission_denied.visibility = View.VISIBLE
 
         config.noPermission?.let { image_permission_denied.setImageDrawable(config.noPermission) }
-        text_permission_denied.visibility = if (config.disableNoPermissionText) View.GONE else View.VISIBLE
         config.noPermissionText?.let { image_permission_denied.setImageDrawable(config.noPermission) }
     }
 
@@ -175,9 +181,9 @@ class SimpleImagePickerFragment : Fragment(),
     }
 
     override fun finishPickImages(items: List<Image>) {
-        val intent = Intent()
-        intent.putExtra(ExtraName.PICKED_IMAGE.name, items.map { it.path }.toTypedArray())
-        activity?.setResult(RESULT_OK, intent)
+        Intent()
+                .apply { putExtra(ExtraName.PICKED_IMAGE.name, items.map { it.path }.toTypedArray()) }
+                .let { activity?.setResult(RESULT_OK, it) }
     }
 
     override fun finish() {

@@ -13,17 +13,18 @@ import java.io.File
 
 class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     interface OnItemClickListener {
-        fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image) {}
+        fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean) {}
     }
 
     interface OnItemLongClickListener {
-        fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image) = false
+        fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean) = false
     }
 
     var onItemClickListener: OnItemClickListener? = null
     var onItemLongClickListener: OnItemLongClickListener? = null
     private lateinit var parent: ViewGroup
     private val selectedImages = ArrayList<Image>()
+    private var selectable: Boolean = true
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val items = ArrayList<Image>()
@@ -37,18 +38,34 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
         val itemView = holder.itemView
         val item = getItem(position)
 
+        itemView.view_disable.visibility = View.GONE
+        itemView.view_selected.visibility = View.GONE
+
         Glide.with(context)
                 .load(File(item.path))
                 .into(itemView.image_thumbnail)
+
+        var isSelectedImage = false
         if (selectedImages.contains(item)) {
-            itemView.view_selected.visibility = View.VISIBLE
-            itemView.text_index.text = (selectedImages.indexOf(item) + 1).toString()
-        } else {
-            itemView.view_selected.visibility = View.GONE
+            itemView.apply {
+                view_selected.visibility = View.VISIBLE
+                text_index.text = (selectedImages.indexOf(item) + 1).toString()
+            }
+            isSelectedImage = true
         }
 
-        itemView.setOnClickListener { v -> onItemClickListener?.onItemClick(parent, v, position, getItem(position)) }
-        itemView.setOnLongClickListener { v -> onItemLongClickListener?.onItemLongClickListener(parent, v, position, getItem(position)) == true }
+        if (!selectable && !isSelectedImage) {
+            itemView.view_disable.visibility = View.VISIBLE
+        }
+
+        itemView.also {
+            it.setOnClickListener { v ->
+                onItemClickListener?.onItemClick(parent, v, position, getItem(position), selectable || isSelectedImage)
+            }
+            it.setOnLongClickListener { v ->
+                onItemLongClickListener?.onItemLongClickListener(parent, v, position, getItem(position), selectable || isSelectedImage) == true
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -72,13 +89,20 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
         notifyDataSetChanged()
     }
 
-    fun updateItemView(position: Int) {
+    fun updateItemView(position: Int, maxSelectCount: Int) {
         if (selectedImages.contains(getItem(position))) {
             selectedImages.remove(getItem(position))
+            selectable = selectedImages.size < maxSelectCount
             notifyDataSetChanged()
             return
         }
+
         selectedImages.add(getItem(position))
+        if (selectedImages.size == maxSelectCount) {
+            selectable = false
+            notifyDataSetChanged()
+            return
+        }
         notifyItemChanged(position)
     }
 
