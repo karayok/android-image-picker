@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import com.karageageta.simpleimagepicker.SimpleImagePicker
 import kotlinx.android.synthetic.main.fragment_main.*
 import com.karageageta.sample.R
+import com.karageageta.sample.SampleApplication
+import com.karageageta.sample.di.module.MainPresenterModule
+import javax.inject.Inject
 
 class MainFragment : Fragment(),
         MainContract.View,
@@ -19,15 +22,20 @@ class MainFragment : Fragment(),
 
     private enum class Tag { CHOOSE_IMAGE }
 
-    lateinit var presenter: MainPresenter
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-            = inflater.inflate(R.layout.fragment_main, container, false)
+    @Inject lateinit var presenter: MainContract.Presenter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        presenter = MainPresenter(this, context)
+        (activity?.application as SampleApplication).component
+                .mainComponent(MainPresenterModule(this))
+                .inject(this)
     }
+
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_main, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

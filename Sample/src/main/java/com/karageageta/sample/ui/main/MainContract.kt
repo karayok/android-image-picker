@@ -7,7 +7,7 @@ interface MainContract {
         fun addImages()
     }
 
-    interface Presenter<out T : BaseContract.View> : BaseContract.Presenter<T> {
-        fun imagesSelected(pats: List<String>)
+    interface Presenter: BaseContract.Presenter {
+        fun imagesSelected(paths: List<String>)
     }
 }
