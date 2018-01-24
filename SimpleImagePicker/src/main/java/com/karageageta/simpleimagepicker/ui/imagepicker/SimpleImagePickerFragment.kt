@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.main
+package com.karageageta.simpleimagepicker.ui.imagepicker
 
 import android.Manifest
 import android.annotation.SuppressLint

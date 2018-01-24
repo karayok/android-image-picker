@@ -1,7 +1,7 @@
 package com.karageageta.simpleimagepicker
 
 import android.app.Activity
-import com.karageageta.simpleimagepicker.ui.main.SimpleImagePickerActivity
+import com.karageageta.simpleimagepicker.ui.imagepicker.SimpleImagePickerActivity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import com.karageageta.simpleimagepicker.helper.ExtraName

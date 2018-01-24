@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.main
+package com.karageageta.simpleimagepicker.ui.imagepicker
 
 import com.karageageta.simpleimagepicker.model.data.Album
 import com.karageageta.simpleimagepicker.model.data.Image

@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.main
+package com.karageageta.simpleimagepicker.ui.imagepicker
 
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.support.v7.app.AppCompatActivity

@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.main
+package com.karageageta.simpleimagepicker.ui.imagepicker
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -8,16 +8,29 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.karageageta.simpleimagepicker.R
 import com.karageageta.simpleimagepicker.model.data.Image
-import kotlinx.android.synthetic.main.item_image.view.*
+import kotlinx.android.synthetic.main.item_image_picker_image.view.*
 import java.io.File
 
 class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     interface OnItemClickListener {
-        fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean) {}
+        fun onItemClick(
+                parent: ViewGroup,
+                view: View,
+                position: Int,
+                item: Image,
+                selectable: Boolean
+        ) {
+        }
     }
 
     interface OnItemLongClickListener {
-        fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean) = false
+        fun onItemLongClickListener(
+                parent: ViewGroup,
+                view: View,
+                position: Int,
+                item: Image,
+                selectable: Boolean
+        ) = false
     }
 
     var onItemClickListener: OnItemClickListener? = null
@@ -31,7 +44,7 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         this.parent = parent!!
-        return ViewHolder(inflater.inflate(R.layout.item_image, parent, false))
+        return ViewHolder(inflater.inflate(R.layout.item_image_picker_image, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -59,11 +72,25 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
         }
 
         itemView.also {
-            it.setOnClickListener { v ->
-                onItemClickListener?.onItemClick(parent, v, position, getItem(position), selectable || isSelectedImage)
+            it.setOnClickListener { view ->
+                onItemClickListener
+                        ?.onItemClick(
+                                parent,
+                                view,
+                                position,
+                                getItem(position),
+                                selectable || isSelectedImage
+                        )
             }
-            it.setOnLongClickListener { v ->
-                onItemLongClickListener?.onItemLongClickListener(parent, v, position, getItem(position), selectable || isSelectedImage) == true
+            it.setOnLongClickListener { view ->
+                onItemLongClickListener
+                        ?.onItemLongClickListener(
+                                parent,
+                                view,
+                                position,
+                                getItem(position),
+                                selectable || isSelectedImage
+                        ) == true
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.main
+package com.karageageta.simpleimagepicker.ui.imagepicker
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
