@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RequestCode.PICK_IMAGE.rawValue && resultCode == RESULT_OK && data != null) {
             val images = data.getStringArrayExtra(ExtraName.PICKED_IMAGE.name).toList()
-            fragment.presenter.imagesSelected(images)
+            fragment.imagesSelected(images)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

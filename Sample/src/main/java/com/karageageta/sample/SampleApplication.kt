@@ -3,7 +3,7 @@ package com.karageageta.sample
 import android.app.Application
 import com.karageageta.sample.di.component.AppComponent
 import com.karageageta.sample.di.module.AppModule
-import com.karageageta.sample.di.DaggerAppComponent
+import com.karageageta.sample.di.component.DaggerAppComponent
 
 class SampleApplication : Application() {
     lateinit var component: AppComponent
