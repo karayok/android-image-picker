@@ -39,6 +39,11 @@ class SimpleImagePicker {
             return this
         }
 
+        fun packageName(name: String): Builder {
+            config.packageName = name
+            return this
+        }
+
         fun start() {
             Intent(activity, SimpleImagePickerActivity::class.java)
                     .apply { putExtra(ExtraName.CONFIG.name, config as Serializable) }

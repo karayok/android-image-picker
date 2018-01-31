@@ -6,4 +6,5 @@
     <string name="text_permission_denied_external_storage">Please grant the permission to show media.</string>
 
     <string name="menu_item_finish">Finish</string>
+    <string name="button_open_setting">Open Setting</string>
 </resources>

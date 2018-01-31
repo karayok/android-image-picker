@@ -5,7 +5,9 @@ import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.support.v4.app.Fragment
 
 import com.karageageta.simpleimagepicker.R
@@ -25,6 +27,7 @@ import java.io.Serializable
 
 class SimpleImagePickerFragment : Fragment(),
         SimpleImagePickerContract.View,
+        View.OnClickListener,
         AdapterView.OnItemSelectedListener,
         ImageListRecyclerViewAdapter.OnItemClickListener,
         ImageListRecyclerViewAdapter.OnItemLongClickListener {
@@ -36,7 +39,7 @@ class SimpleImagePickerFragment : Fragment(),
         }
     }
 
-    private enum class Tag { SPINNER_ALBUM, IMAGE }
+    private enum class Tag { SPINNER_ALBUM, IMAGE, BUTTON_SETTING }
 
     private val config: Config by lazy {
         arguments?.getSerializable(ExtraName.CONFIG.name) as Config
@@ -80,6 +83,11 @@ class SimpleImagePickerFragment : Fragment(),
             it.onItemLongClickListener = this
         }
 
+        button_setting.also {
+            it.visibility = if (config.packageName.isNullOrEmpty()) View.GONE else View.VISIBLE
+            it.tag = Tag.BUTTON_SETTING
+            it.setOnClickListener(this)
+        }
     }
 
     override fun onResume() {
@@ -100,42 +108,6 @@ class SimpleImagePickerFragment : Fragment(),
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    // AdapterView.OnItemSelectedListener
-
-    override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        when (adapterView?.tag) {
-            Tag.SPINNER_ALBUM -> presenter.albumSelected(position)
-        }
-    }
-
-    override fun onNothingSelected(adapterView: AdapterView<*>?) {}
-
-    // ImageListRecyclerViewAdapter.OnItemLongClickListener
-
-    override fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean) {
-        when (parent.tag) {
-            Tag.IMAGE -> {
-                if (!selectable) return
-                imageAdapter.updateItemView(position, config.maxCount)
-            }
-        }
-    }
-
-    // ImageListRecyclerViewAdapter.OnItemClickListener
-
-    override fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean): Boolean {
-        when (parent.tag) {
-            Tag.IMAGE -> {
-                if (!selectable) return false
-                Intent(context, DetailActivity::class.java)
-                        .apply { putExtra(ExtraName.IMAGE_PATH.name, item.path) }
-                        .let { startActivity(it) }
-                return true
-            }
-        }
-        return false
     }
 
     // SimpleImagePickerContract.View
@@ -188,5 +160,56 @@ class SimpleImagePickerFragment : Fragment(),
 
     override fun finish() {
         activity?.finish()
+    }
+
+    override fun onClick(view: View?) {
+        when (view?.tag) {
+            Tag.BUTTON_SETTING -> {
+                config.packageName
+                        ?.takeIf { it.isNotEmpty() }
+                        ?.let { name ->
+                            Intent().apply {
+                                action = ACTION_APPLICATION_DETAILS_SETTINGS
+                                data = Uri.parse("package:" + name)
+                            }.let { activity?.startActivity(it) }
+                        }
+            }
+        }
+    }
+
+    // AdapterView.OnItemSelectedListener
+
+    override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        when (adapterView?.tag) {
+            Tag.SPINNER_ALBUM -> presenter.albumSelected(position)
+        }
+    }
+
+    override fun onNothingSelected(adapterView: AdapterView<*>?) {}
+
+    // ImageListRecyclerViewAdapter.OnItemLongClickListener
+
+    override fun onItemClick(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean) {
+        when (parent.tag) {
+            Tag.IMAGE -> {
+                if (!selectable) return
+                imageAdapter.updateItemView(position, config.maxCount)
+            }
+        }
+    }
+
+    // ImageListRecyclerViewAdapter.OnItemClickListener
+
+    override fun onItemLongClickListener(parent: ViewGroup, view: View, position: Int, item: Image, selectable: Boolean): Boolean {
+        when (parent.tag) {
+            Tag.IMAGE -> {
+                if (!selectable) return false
+                Intent(context, DetailActivity::class.java)
+                        .apply { putExtra(ExtraName.IMAGE_PATH.name, item.path) }
+                        .let { startActivity(it) }
+                return true
+            }
+        }
+        return false
     }
 }

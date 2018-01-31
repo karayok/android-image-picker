@@ -74,6 +74,7 @@ class MainFragment : Fragment(),
                     SimpleImagePicker
                             .Builder(it)
                             .pickerAllItemTitle(getString(R.string.text_all))
+                            .packageName(context?.packageName ?: "")
                             .start()
                 }
             }

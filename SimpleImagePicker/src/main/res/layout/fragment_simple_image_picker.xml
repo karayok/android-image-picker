@@ -79,6 +79,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/image_permission_denied" />
 
+            <Button
+                android:id="@+id/button_setting"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:text="@string/button_open_setting"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_permission_denied" />
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

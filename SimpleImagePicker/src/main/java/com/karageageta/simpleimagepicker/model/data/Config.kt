@@ -8,5 +8,6 @@ data class Config(
         var maxCount: Int = 5,
         var noImage: Drawable? = null,
         var noPermission: Drawable? = null,
-        var noPermissionText: String? = null
+        var noPermissionText: String? = null,
+        var packageName: String? = null
 ) : Serializable
