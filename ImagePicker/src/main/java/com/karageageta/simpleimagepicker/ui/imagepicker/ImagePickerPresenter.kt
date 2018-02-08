@@ -11,11 +11,11 @@ import com.karageageta.simpleimagepicker.model.data.Config
 import com.karageageta.simpleimagepicker.model.data.Image
 import java.io.File
 
-class SimpleImagePickerPresenter(
-        override val view: SimpleImagePickerContract.View?,
+class ImagePickerPresenter(
+        override val view: ImagePickerContract.View?,
         private val context: Context?,
         private val config: Config
-) : SimpleImagePickerContract.Presenter<SimpleImagePickerContract.View> {
+) : ImagePickerContract.Presenter<ImagePickerContract.View> {
     private val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DISPLAY_NAME,
@@ -24,21 +24,14 @@ class SimpleImagePickerPresenter(
     )
 
     private var albums = LinkedHashMap<String, Album>()
-    private var isInitialLoad: Boolean = true
 
     override fun resume() {
         when (context?.let { ContextCompat.checkSelfPermission(it, READ_EXTERNAL_STORAGE) }) {
             PERMISSION_GRANTED -> {
-                view?.showImages()
+                view?.hidePermissionDenied()
                 load()
             }
-            else -> {
-                if (isInitialLoad) {
-                    isInitialLoad = false
-                    view?.requestPermissions()
-                }
-                view?.showPermissionDenied()
-            }
+            else -> view?.showPermissionDenied()
         }
     }
 
@@ -62,7 +55,7 @@ class SimpleImagePickerPresenter(
     // private
 
     private fun load() {
-        if (albums.size > 0) {
+        if (albums.isNotEmpty()) {
             return
         }
         loadAlbums()
@@ -83,23 +76,23 @@ class SimpleImagePickerPresenter(
 
         context?.getString(R.string.text_album_all_key)?.let { albums.put(it, Album(config.pickerAllItemTitle)) }
 
-        cursor?.use {
-            cursor.moveToLast()
+        cursor?.takeIf { it.count > 0 }?.use {
+            it.moveToLast()
             do {
-                val id = cursor.getLong(cursor.getColumnIndex(projection[0]))
-                val name = cursor.getString(cursor.getColumnIndex(projection[1]))
-                val path = cursor.getString(cursor.getColumnIndex(projection[2]))
-                val bucket = cursor.getString(cursor.getColumnIndex(projection[3]))
+                val id = it.getLong(it.getColumnIndex(projection[0]))
+                val name = it.getString(it.getColumnIndex(projection[1]))
+                val path = it.getString(it.getColumnIndex(projection[2]))
+                val bucket = it.getString(it.getColumnIndex(projection[3]))
 
                 val file = File(path)
                 if (file.exists()) {
                     if (albums[bucket] == null) {
-                        albums.put(bucket, Album(bucket))
+                        albums[bucket] = Album(bucket)
                     }
                     albums[context?.getString(R.string.text_album_all_key)]?.images?.add(Image(id, name, path))
                     albums[bucket]?.images?.add(Image(id, name, path))
                 }
-            } while (cursor.moveToPrevious())
+            } while (it.moveToPrevious())
         }
     }
 }

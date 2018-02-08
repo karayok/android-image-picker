@@ -1,6 +1,7 @@
 package com.karageageta.simpleimagepicker.ui.imagepicker
 
 import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Context
@@ -13,6 +14,8 @@ import android.support.v4.app.Fragment
 import com.karageageta.simpleimagepicker.R
 import com.karageageta.simpleimagepicker.helper.RequestCode
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
 import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import android.widget.AdapterView
@@ -25,14 +28,14 @@ import com.karageageta.simpleimagepicker.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_simple_image_picker.*
 import java.io.Serializable
 
-class SimpleImagePickerFragment : Fragment(),
-        SimpleImagePickerContract.View,
+class ImagePickerFragment : Fragment(),
+        ImagePickerContract.View,
         View.OnClickListener,
         AdapterView.OnItemSelectedListener,
         ImageListRecyclerViewAdapter.OnItemClickListener,
         ImageListRecyclerViewAdapter.OnItemLongClickListener {
     companion object {
-        fun newInstance(config: Serializable) = SimpleImagePickerFragment().apply {
+        fun newInstance(config: Serializable) = ImagePickerFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(ExtraName.CONFIG.name, config)
             }
@@ -47,16 +50,15 @@ class SimpleImagePickerFragment : Fragment(),
 
     private lateinit var albumAdapter: ArrayAdapter<String>
     private lateinit var imageAdapter: ImageListRecyclerViewAdapter
-    private lateinit var presenter: SimpleImagePickerPresenter
+    private lateinit var presenter: ImagePickerPresenter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-            = inflater.inflate(R.layout.fragment_simple_image_picker, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_simple_image_picker, container, false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         albumAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_dropdown_item)
         imageAdapter = ImageListRecyclerViewAdapter(context)
-        presenter = SimpleImagePickerPresenter(this, context, config)
+        presenter = ImagePickerPresenter(this, context, config)
     }
 
     @SuppressLint("Recycle")
@@ -88,6 +90,13 @@ class SimpleImagePickerFragment : Fragment(),
             it.tag = Tag.BUTTON_SETTING
             it.setOnClickListener(this)
         }
+
+        val permission = context?.let { ContextCompat.checkSelfPermission(it, READ_EXTERNAL_STORAGE) }
+        if (permission != PERMISSION_GRANTED) {
+            activity?.let {
+                ActivityCompat.requestPermissions(it, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), RequestCode.PICK_IMAGE.rawValue)
+            }
+        }
     }
 
     override fun onResume() {
@@ -110,7 +119,7 @@ class SimpleImagePickerFragment : Fragment(),
         return super.onOptionsItemSelected(item)
     }
 
-    // SimpleImagePickerContract.View
+    // ImagePickerContract.View
 
     override fun scrollToTop() {
         recycler_view.smoothScrollToPosition(0)
@@ -133,15 +142,15 @@ class SimpleImagePickerFragment : Fragment(),
         imageAdapter.addAll(items)
     }
 
-    override fun showImages() {
-        view_permission_denied.visibility = View.GONE
-    }
-
     override fun showPermissionDenied() {
         view_permission_denied.visibility = View.VISIBLE
 
         config.noPermission?.let { image_permission_denied.setImageDrawable(config.noPermission) }
         config.noPermissionText?.let { image_permission_denied.setImageDrawable(config.noPermission) }
+    }
+
+    override fun hidePermissionDenied() {
+        view_permission_denied.visibility = View.GONE
     }
 
     override fun requestPermissions() {

@@ -3,7 +3,7 @@
     package="com.karageageta.simpleimagepicker">
 
     <application>
-        <activity android:name=".ui.imagepicker.SimpleImagePickerActivity" />
+        <activity android:name=".ui.imagepicker.ImagePickerActivity" />
         <activity android:name=".ui.detail.DetailActivity" />
     </application>
 

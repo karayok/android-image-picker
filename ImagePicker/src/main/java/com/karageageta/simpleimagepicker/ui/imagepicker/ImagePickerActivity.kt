@@ -8,8 +8,8 @@ import com.karageageta.simpleimagepicker.R
 import com.karageageta.simpleimagepicker.helper.ExtraName
 import com.karageageta.simpleimagepicker.helper.RequestCode
 
-class SimpleImagePickerActivity : AppCompatActivity() {
-    private lateinit var fragment: SimpleImagePickerFragment
+class ImagePickerActivity : AppCompatActivity() {
+    private lateinit var fragment: ImagePickerFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,10 +18,10 @@ class SimpleImagePickerActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             val config = intent.getSerializableExtra(ExtraName.CONFIG.name)
-            fragment = SimpleImagePickerFragment.newInstance(config)
+            fragment = ImagePickerFragment.newInstance(config)
             supportFragmentManager.beginTransaction().add(R.id.simple_image_picker_content, fragment).commit()
         } else {
-            fragment = supportFragmentManager.findFragmentById(R.id.simple_image_picker_content) as SimpleImagePickerFragment
+            fragment = supportFragmentManager.findFragmentById(R.id.simple_image_picker_content) as ImagePickerFragment
         }
     }
 
@@ -39,7 +39,7 @@ class SimpleImagePickerActivity : AppCompatActivity() {
         when (requestCode) {
             RequestCode.PICK_IMAGE.rawValue -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
-                    fragment.showImages()
+                    fragment.hidePermissionDenied()
                 } else {
                     fragment.showPermissionDenied()
                 }

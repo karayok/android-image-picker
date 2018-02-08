@@ -1,7 +1,7 @@
 package com.karageageta.simpleimagepicker
 
 import android.app.Activity
-import com.karageageta.simpleimagepicker.ui.imagepicker.SimpleImagePickerActivity
+import com.karageageta.simpleimagepicker.ui.imagepicker.ImagePickerActivity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import com.karageageta.simpleimagepicker.helper.ExtraName
@@ -9,7 +9,7 @@ import com.karageageta.simpleimagepicker.helper.RequestCode
 import com.karageageta.simpleimagepicker.model.data.Config
 import java.io.Serializable
 
-class SimpleImagePicker {
+class ImagePicker {
     // TODO : action bar color , HomeAsUpIndicator
     class Builder(private var activity: Activity) {
         private val config = Config()
@@ -45,7 +45,7 @@ class SimpleImagePicker {
         }
 
         fun start() {
-            Intent(activity, SimpleImagePickerActivity::class.java)
+            Intent(activity, ImagePickerActivity::class.java)
                     .apply { putExtra(ExtraName.CONFIG.name, config as Serializable) }
                     .let { activity.startActivityForResult(it, RequestCode.PICK_IMAGE.rawValue) }
         }

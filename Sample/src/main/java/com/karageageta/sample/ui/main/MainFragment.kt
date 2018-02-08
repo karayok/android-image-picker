@@ -7,7 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.karageageta.simpleimagepicker.SimpleImagePicker
+import com.karageageta.simpleimagepicker.ImagePicker
 import kotlinx.android.synthetic.main.fragment_main.*
 import com.karageageta.sample.R
 import com.karageageta.sample.SampleApplication
@@ -71,7 +71,7 @@ class MainFragment : Fragment(),
         when (view?.tag) {
             Tag.CHOOSE_IMAGE -> {
                 activity?.let {
-                    SimpleImagePicker
+                    ImagePicker
                             .Builder(it)
                             .pickerAllItemTitle(getString(R.string.text_all))
                             .packageName(context?.packageName ?: "")
