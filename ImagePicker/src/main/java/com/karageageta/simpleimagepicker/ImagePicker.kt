@@ -24,12 +24,12 @@ class ImagePicker {
             return this
         }
 
-        fun noImage(image: Drawable): Builder {
+        fun noImage(image: Drawable?): Builder {
             config.noImage = image
             return this
         }
 
-        fun noPermissionImage(image: Drawable): Builder {
+        fun noPermissionImage(image: Drawable?): Builder {
             config.noPermission = image
             return this
         }
