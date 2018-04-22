@@ -6,7 +6,7 @@
     tools:context="com.karageageta.imagepicker.ui.picker.ImagePickerActivity">
 
     <FrameLayout
-        android:id="@+id/simple_image_picker_content"
+        android:id="@+id/image_picker_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

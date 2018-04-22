@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     tools:context=".ui.detail.DetailFragment"
-    tools:showIn="@layout/activity_detail">
+    tools:showIn="@layout/activity_karage_imagepicker_detail">
 
     <ImageView
         android:id="@+id/image_detail"

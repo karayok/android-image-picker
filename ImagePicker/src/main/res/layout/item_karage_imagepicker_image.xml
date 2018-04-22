@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:padding="@dimen/padding_micro">
+    android:padding="@dimen/karage_imagepicker_padding_micro">
 
     <ImageView
         android:id="@+id/image_thumbnail"
@@ -18,7 +18,7 @@
         android:id="@+id/view_disable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/translucent_black"
+        android:background="@color/karage_imagepicker_translucent_black"
         android:focusable="false"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,13 +35,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/karage_imagepicker_shape_image_selected" />
+            android:background="@drawable/shape_karage_imagepicker_image_selected" />
 
         <TextView
             android:id="@+id/text_index"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            android:background="@android:color/holo_blue_light"
+            android:background="@color/karage_imagepicker_accent"
             android:gravity="center"
             android:textAlignment="center"
             android:textColor="@android:color/white"

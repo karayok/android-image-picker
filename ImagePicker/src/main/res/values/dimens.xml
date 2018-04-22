@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_micro">1dp</dimen>
-    <dimen name="margin_medium">12dp</dimen>
+    <dimen name="karage_imagepicker_margin_micro">1dp</dimen>
+    <dimen name="karage_imagepicker_margin_medium">12dp</dimen>
 
-    <dimen name="padding_micro">1dp</dimen>
-    <dimen name="padding_medium">12dp</dimen>
+    <dimen name="karage_imagepicker_padding_micro">1dp</dimen>
+    <dimen name="karage_imagepicker_padding_medium">12dp</dimen>
 </resources>

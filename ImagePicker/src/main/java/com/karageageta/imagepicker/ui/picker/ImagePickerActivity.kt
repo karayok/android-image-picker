@@ -13,15 +13,15 @@ class ImagePickerActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_simple_image_picker)
+        setContentView(R.layout.activity_karage_imagepicker_picker)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (savedInstanceState == null) {
             val config = intent.getSerializableExtra(ExtraName.CONFIG.name)
             fragment = ImagePickerFragment.newInstance(config)
-            supportFragmentManager.beginTransaction().add(R.id.simple_image_picker_content, fragment).commit()
+            supportFragmentManager.beginTransaction().add(R.id.image_picker_content, fragment).commit()
         } else {
-            fragment = supportFragmentManager.findFragmentById(R.id.simple_image_picker_content) as ImagePickerFragment
+            fragment = supportFragmentManager.findFragmentById(R.id.image_picker_content) as ImagePickerFragment
         }
     }
 

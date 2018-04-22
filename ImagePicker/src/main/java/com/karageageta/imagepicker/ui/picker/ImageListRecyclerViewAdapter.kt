@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.karageageta.imagepicker.R
 import com.karageageta.imagepicker.model.data.Image
-import kotlinx.android.synthetic.main.item_image_picker_image.view.*
+import kotlinx.android.synthetic.main.item_karage_imagepicker_image.view.*
 import java.io.File
 
 class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -44,7 +44,7 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         this.parent = parent
-        return ViewHolder(inflater.inflate(R.layout.item_image_picker_image, parent, false))
+        return ViewHolder(inflater.inflate(R.layout.item_karage_imagepicker_image, parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {

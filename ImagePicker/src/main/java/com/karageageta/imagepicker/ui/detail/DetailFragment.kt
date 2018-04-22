@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.karageageta.imagepicker.R
 import com.karageageta.imagepicker.helper.ExtraName
-import kotlinx.android.synthetic.main.fragment_detail.*
+import kotlinx.android.synthetic.main.fragment_karage_imagepicker_detail.*
 import java.io.File
 
 class DetailFragment : Fragment() {
@@ -21,7 +21,7 @@ class DetailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
-            = inflater.inflate(R.layout.fragment_detail, container, false)
+            = inflater.inflate(R.layout.fragment_karage_imagepicker_detail, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

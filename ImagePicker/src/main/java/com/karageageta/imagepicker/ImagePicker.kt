@@ -10,7 +10,6 @@ import com.karageageta.imagepicker.model.data.Config
 import java.io.Serializable
 
 class ImagePicker {
-    // TODO : action bar color , HomeAsUpIndicator
     class Builder(private var activity: Activity) {
         private val config = Config()
 
