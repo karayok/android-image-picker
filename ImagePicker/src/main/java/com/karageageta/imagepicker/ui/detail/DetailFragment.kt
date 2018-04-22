@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.detail
+package com.karageageta.imagepicker.ui.detail
 
 import android.support.v4.app.Fragment
 import android.os.Bundle
@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.karageageta.simpleimagepicker.R
-import com.karageageta.simpleimagepicker.helper.ExtraName
+import com.karageageta.imagepicker.R
+import com.karageageta.imagepicker.helper.ExtraName
 import kotlinx.android.synthetic.main.fragment_detail.*
 import java.io.File
 

@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.helper
+package com.karageageta.imagepicker.helper
 
 import android.content.Context
 import android.util.AttributeSet

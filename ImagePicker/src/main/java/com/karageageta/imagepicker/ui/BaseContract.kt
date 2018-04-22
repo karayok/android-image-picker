@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui
+package com.karageageta.imagepicker.ui
 
 open class BaseContract {
     interface View

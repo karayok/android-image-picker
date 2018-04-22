@@ -1,12 +1,12 @@
-package com.karageageta.simpleimagepicker.ui.imagepicker
+package com.karageageta.imagepicker.ui.picker
 
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import com.karageageta.simpleimagepicker.R
-import com.karageageta.simpleimagepicker.helper.ExtraName
-import com.karageageta.simpleimagepicker.helper.RequestCode
+import com.karageageta.imagepicker.R
+import com.karageageta.imagepicker.helper.ExtraName
+import com.karageageta.imagepicker.helper.RequestCode
 
 class ImagePickerActivity : AppCompatActivity() {
     private lateinit var fragment: ImagePickerFragment

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.karageageta.simpleimagepicker.ui.imagepicker.ImagePickerFragment">
+    tools:context="com.karageageta.imagepicker.ui.picker.ImagePickerFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_medium" />
 
-        <com.karageageta.simpleimagepicker.helper.EmptySupportedRecyclerView
+        <com.karageageta.imagepicker.helper.EmptySupportedRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -35,7 +35,7 @@
                 android:id="@+id/image_empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/image_no_image"
+                android:src="@drawable/karage_imagepicker_image_no_image"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +63,7 @@
                 android:id="@+id/image_permission_denied"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/image_no_permission"
+                android:src="@drawable/karage_imagepicker_image_no_permission"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="ContentDescription" />

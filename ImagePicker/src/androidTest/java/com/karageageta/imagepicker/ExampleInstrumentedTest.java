@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker;
+package com.karageageta.imagepicker;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

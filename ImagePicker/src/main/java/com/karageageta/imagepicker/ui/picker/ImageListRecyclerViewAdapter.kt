@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.imagepicker
+package com.karageageta.imagepicker.ui.picker
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
-import com.karageageta.simpleimagepicker.R
-import com.karageageta.simpleimagepicker.model.data.Image
+import com.karageageta.imagepicker.R
+import com.karageageta.imagepicker.model.data.Image
 import kotlinx.android.synthetic.main.item_image_picker_image.view.*
 import java.io.File
 
@@ -42,8 +42,8 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
     private val inflater: LayoutInflater = LayoutInflater.from(context)
     private val items = ArrayList<Image>()
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        this.parent = parent!!
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        this.parent = parent
         return ViewHolder(inflater.inflate(R.layout.item_image_picker_image, parent, false))
     }
 
@@ -99,7 +99,7 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
         return items.size
     }
 
-    // Public
+// Public
 
     fun clear() {
         items.clear()
@@ -137,7 +137,7 @@ class ImageListRecyclerViewAdapter(private val context: Context) : RecyclerView.
         return selectedImages
     }
 
-    // private
+// private
 
     private fun getItem(position: Int): Image {
         return items[position]

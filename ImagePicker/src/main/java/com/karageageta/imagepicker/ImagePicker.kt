@@ -1,12 +1,12 @@
-package com.karageageta.simpleimagepicker
+package com.karageageta.imagepicker
 
 import android.app.Activity
-import com.karageageta.simpleimagepicker.ui.imagepicker.ImagePickerActivity
+import com.karageageta.imagepicker.ui.picker.ImagePickerActivity
 import android.content.Intent
 import android.graphics.drawable.Drawable
-import com.karageageta.simpleimagepicker.helper.ExtraName
-import com.karageageta.simpleimagepicker.helper.RequestCode
-import com.karageageta.simpleimagepicker.model.data.Config
+import com.karageageta.imagepicker.helper.ExtraName
+import com.karageageta.imagepicker.helper.RequestCode
+import com.karageageta.imagepicker.model.data.Config
 import java.io.Serializable
 
 class ImagePicker {

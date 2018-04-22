@@ -3,11 +3,11 @@ package com.karageageta.sample.ui.main
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.karageageta.simpleimagepicker.ImagePicker
+import com.karageageta.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.fragment_main.*
 import com.karageageta.sample.R
 import com.karageageta.sample.SampleApplication
@@ -24,7 +24,8 @@ class MainFragment : Fragment(),
 
     private enum class Tag { CHOOSE_IMAGE }
 
-    @Inject lateinit var presenter: MainContract.Presenter
+    @Inject
+    lateinit var presenter: MainContract.Presenter
     lateinit var adapter: MainImageRecyclerViewAdapter
 
     override fun onAttach(context: Context) {
@@ -49,7 +50,7 @@ class MainFragment : Fragment(),
             it.setOnClickListener(this)
         }
         view_recycle.also {
-            it.layoutManager = GridLayoutManager(context, 2)
+            it.layoutManager = LinearLayoutManager(context)
             it.adapter = this.adapter
             view_recycle.emptyView = view_empty
         }

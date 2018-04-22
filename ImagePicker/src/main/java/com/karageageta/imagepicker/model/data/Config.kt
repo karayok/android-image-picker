@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.model.data
+package com.karageageta.imagepicker.model.data
 
 import android.graphics.drawable.Drawable
 import java.io.Serializable

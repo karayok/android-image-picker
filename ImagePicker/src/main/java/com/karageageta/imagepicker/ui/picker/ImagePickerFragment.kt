@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.ui.imagepicker
+package com.karageageta.imagepicker.ui.picker
 
 import android.Manifest
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
@@ -11,8 +11,8 @@ import android.os.Bundle
 import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.support.v4.app.Fragment
 
-import com.karageageta.simpleimagepicker.R
-import com.karageageta.simpleimagepicker.helper.RequestCode
+import com.karageageta.imagepicker.R
+import com.karageageta.imagepicker.helper.RequestCode
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
@@ -20,11 +20,11 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.karageageta.simpleimagepicker.helper.ExtraName
-import com.karageageta.simpleimagepicker.model.data.Album
-import com.karageageta.simpleimagepicker.model.data.Config
-import com.karageageta.simpleimagepicker.model.data.Image
-import com.karageageta.simpleimagepicker.ui.detail.DetailActivity
+import com.karageageta.imagepicker.helper.ExtraName
+import com.karageageta.imagepicker.model.data.Album
+import com.karageageta.imagepicker.model.data.Config
+import com.karageageta.imagepicker.model.data.Image
+import com.karageageta.imagepicker.ui.detail.DetailActivity
 import kotlinx.android.synthetic.main.fragment_simple_image_picker.*
 import java.io.Serializable
 
@@ -106,7 +106,7 @@ class ImagePickerFragment : Fragment(),
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_simple_image_picker, menu)
+        inflater?.inflate(R.menu.menu_image_picker, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

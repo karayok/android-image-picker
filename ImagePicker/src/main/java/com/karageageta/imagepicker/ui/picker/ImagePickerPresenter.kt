@@ -1,14 +1,14 @@
-package com.karageageta.simpleimagepicker.ui.imagepicker
+package com.karageageta.imagepicker.ui.picker
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Context
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
-import com.karageageta.simpleimagepicker.R
-import com.karageageta.simpleimagepicker.model.data.Album
-import com.karageageta.simpleimagepicker.model.data.Config
-import com.karageageta.simpleimagepicker.model.data.Image
+import com.karageageta.imagepicker.R
+import com.karageageta.imagepicker.model.data.Album
+import com.karageageta.imagepicker.model.data.Config
+import com.karageageta.imagepicker.model.data.Image
 import java.io.File
 
 class ImagePickerPresenter(

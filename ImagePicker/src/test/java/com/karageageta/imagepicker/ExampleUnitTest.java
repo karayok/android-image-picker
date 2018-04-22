@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker;
+package com.karageageta.imagepicker;
 
 import org.junit.Test;
 

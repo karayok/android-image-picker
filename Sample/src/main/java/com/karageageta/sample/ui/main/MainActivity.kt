@@ -4,8 +4,8 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.karageageta.sample.R
-import com.karageageta.simpleimagepicker.helper.ExtraName
-import com.karageageta.simpleimagepicker.helper.RequestCode
+import com.karageageta.imagepicker.helper.ExtraName
+import com.karageageta.imagepicker.helper.RequestCode
 
 class MainActivity : AppCompatActivity() {
     private lateinit var fragment: MainFragment

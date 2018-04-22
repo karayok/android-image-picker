@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.model.data
+package com.karageageta.imagepicker.model.data
 
 data class Album(
         val folderName: String = "",

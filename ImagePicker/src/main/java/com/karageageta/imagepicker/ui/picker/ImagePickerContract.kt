@@ -1,8 +1,8 @@
-package com.karageageta.simpleimagepicker.ui.imagepicker
+package com.karageageta.imagepicker.ui.picker
 
-import com.karageageta.simpleimagepicker.model.data.Album
-import com.karageageta.simpleimagepicker.model.data.Image
-import com.karageageta.simpleimagepicker.ui.BaseContract
+import com.karageageta.imagepicker.model.data.Album
+import com.karageageta.imagepicker.model.data.Image
+import com.karageageta.imagepicker.ui.BaseContract
 
 interface ImagePickerContract {
     interface View : BaseContract.View {

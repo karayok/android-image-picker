@@ -60,6 +60,7 @@ Upcoming Changes
 
 License
 ---
+
 ```
 Copyright 2018 Yoko Karasaki
 
@@ -75,3 +76,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+Pictures for [Screenshots](#screenshots) are from [フリー素材ぱくたそ](https://www.pakutaso.com/) .
+
+See [ぱくたそのご利用規約・ガイド | ぱくたそフリー素材](https://www.pakutaso.com/userpolicy.html) for each license information.

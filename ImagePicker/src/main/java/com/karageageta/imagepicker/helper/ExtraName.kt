@@ -1,4 +1,4 @@
-package com.karageageta.simpleimagepicker.helper
+package com.karageageta.imagepicker.helper
 
 enum class ExtraName {
     CONFIG,

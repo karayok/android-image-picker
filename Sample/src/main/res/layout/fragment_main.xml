@@ -13,15 +13,24 @@
         android:text="@string/button_pick_image"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.karageageta.simpleimagepicker.helper.EmptySupportedRecyclerView
-        android:id="@+id/view_recycle"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_medium"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_pick_image" />
+        app:layout_constraintTop_toBottomOf="@id/button_pick_image">
+
+        <com.karageageta.imagepicker.helper.EmptySupportedRecyclerView
+            android:id="@+id/view_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_pick_image" />
+    </android.support.design.widget.CoordinatorLayout>
 
     <View
         android:id="@+id/view_empty"
