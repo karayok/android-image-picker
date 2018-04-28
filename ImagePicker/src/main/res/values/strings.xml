@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">SimpleImagePicker</string>
 
-    <string name="text_spinner_album_item">Album</string>
-    <string name="text_album_all_key">all</string>
-    <string name="text_permission_denied_external_storage">Please grant the permission to show media.</string>
+    <string name="text_imagepicker_spinner_album_item">Album</string>
+    <string name="text_imagepicker_album_all_key">all</string>
+    <string name="text_imagepicker_permission_denied_external_storage">Please grant the permission to show media.</string>
 
-    <string name="menu_item_finish">Finish</string>
-    <string name="button_open_setting">Open Setting</string>
+    <string name="menu_imagepicker_item_finish">Finish</string>
+    <string name="button_imagepicker_open_setting">Open Setting</string>
 </resources>

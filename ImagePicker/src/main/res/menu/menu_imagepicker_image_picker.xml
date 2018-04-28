@@ -5,6 +5,6 @@
     tools:context="com.karageageta.imagepicker.ui.picker.ImagePickerActivity">
     <item
         android:id="@+id/finish"
-        android:title="@string/menu_item_finish"
+        android:title="@string/menu_imagepicker_item_finish"
         app:showAsAction="ifRoom" />
 </menu>

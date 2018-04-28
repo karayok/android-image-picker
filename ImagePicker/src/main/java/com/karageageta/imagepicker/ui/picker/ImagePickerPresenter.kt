@@ -74,7 +74,7 @@ class ImagePickerPresenter(
                 MediaStore.Images.Media.DATE_ADDED
         )
 
-        context?.getString(R.string.text_album_all_key)?.let { albums.put(it, Album(config.pickerAllItemTitle)) }
+        context?.getString(R.string.text_imagepicker_album_all_key)?.let { albums.put(it, Album(config.pickerAllItemTitle)) }
 
         cursor?.takeIf { it.count > 0 }?.use {
             it.moveToLast()
@@ -89,7 +89,7 @@ class ImagePickerPresenter(
                     if (albums[bucket] == null) {
                         albums[bucket] = Album(bucket)
                     }
-                    albums[context?.getString(R.string.text_album_all_key)]?.images?.add(Image(id, name, path))
+                    albums[context?.getString(R.string.text_imagepicker_album_all_key)]?.images?.add(Image(id, name, path))
                     albums[bucket]?.images?.add(Image(id, name, path))
                 }
             } while (it.moveToPrevious())

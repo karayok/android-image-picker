@@ -25,7 +25,7 @@ import com.karageageta.imagepicker.model.data.Album
 import com.karageageta.imagepicker.model.data.Config
 import com.karageageta.imagepicker.model.data.Image
 import com.karageageta.imagepicker.ui.detail.DetailActivity
-import kotlinx.android.synthetic.main.fragment_karage_imagepicker_picker.*
+import kotlinx.android.synthetic.main.fragment_imagepicker_picker.*
 import java.io.Serializable
 
 class ImagePickerFragment : Fragment(),
@@ -52,7 +52,7 @@ class ImagePickerFragment : Fragment(),
     private lateinit var imageAdapter: ImageListRecyclerViewAdapter
     private lateinit var presenter: ImagePickerPresenter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_karage_imagepicker_picker, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_imagepicker_picker, container, false)
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -106,7 +106,7 @@ class ImagePickerFragment : Fragment(),
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.menu_karage_imagepicker_image_picker, menu)
+        inflater?.inflate(R.menu.menu_imagepicker_image_picker, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

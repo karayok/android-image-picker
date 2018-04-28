@@ -1,6 +1,7 @@
-apply plugin: 'com.android.library'
+apply plugin: 'android-library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven'
 
 android {
     compileSdkVersion 27
@@ -21,6 +22,18 @@ android {
     }
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository url: "file://${projectDir}/repository"
+            pom.groupId = 'KarageAgeta'
+            pom.artifactId = 'android-image-picker'
+            pom.version = '0.1'
+        }
+    }
+}
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -37,6 +50,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
 repositories {
     mavenCentral()
 }

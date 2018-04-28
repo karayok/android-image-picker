@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="karage_imagepicker_translucent_black">#95ebebeb</color>
+    <color name="imagepicker_translucent_black">#95ebebeb</color>
     <!-- TODO : Let users change color -->
-    <color name="karage_imagepicker_accent">#3F51B5</color>
+    <color name="imagepicker_accent">#3F51B5</color>
 </resources>

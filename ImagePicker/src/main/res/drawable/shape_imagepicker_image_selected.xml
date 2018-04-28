@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO : fix -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="false" android:state_pressed="false">
         <shape android:shape="rectangle">
-            <stroke android:width="5dp" android:color="@color/karage_imagepicker_accent" />
+            <stroke android:width="5dp" android:color="@color/imagepicker_accent" />
             <solid android:color="@android:color/transparent" />
         </shape>
     </item>
