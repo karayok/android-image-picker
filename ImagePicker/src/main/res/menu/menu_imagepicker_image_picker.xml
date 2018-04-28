@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.karageageta.imagepicker.ui.picker.ImagePickerActivity">
+    tools:context="com.karageageta.imagepicker.io.karageageta.imagepicker.ui.picker.ImagePickerActivity">
     <item
         android:id="@+id/finish"
         android:title="@string/menu_imagepicker_item_finish"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimpleImagePicker</string>
+    <string name="app_name">ImagePicker</string>
 
     <string name="text_imagepicker_spinner_album_item">Album</string>
     <string name="text_imagepicker_album_all_key">all</string>

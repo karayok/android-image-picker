@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.DetailActivity">
+    tools:context="io.github.karageageta.imagepicker.ui.detail.DetailActivity">
 
     <FrameLayout
         android:id="@+id/detail_content"

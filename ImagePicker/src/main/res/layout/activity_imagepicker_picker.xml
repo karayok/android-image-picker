@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.karageageta.imagepicker.ui.picker.ImagePickerActivity">
+    tools:context="com.karageageta.imagepicker.io.karageageta.imagepicker.ui.picker.ImagePickerActivity">
 
     <FrameLayout
         android:id="@+id/image_picker_content"

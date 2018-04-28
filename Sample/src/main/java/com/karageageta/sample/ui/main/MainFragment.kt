@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.karageageta.imagepicker.ImagePicker
+import io.github.karageageta.imagepicker.ImagePicker
 import kotlinx.android.synthetic.main.fragment_main.*
 import com.karageageta.sample.R
 import com.karageageta.sample.SampleApplication

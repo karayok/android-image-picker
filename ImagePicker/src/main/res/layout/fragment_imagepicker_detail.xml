@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".ui.detail.DetailFragment"
+    tools:context="io.github.karageageta.imagepicker.ui.detail.DetailFragment"
     tools:showIn="@layout/activity_imagepicker_detail">
 
     <ImageView

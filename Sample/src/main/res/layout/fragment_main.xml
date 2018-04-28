@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/button_pick_image">
 
-        <com.karageageta.imagepicker.helper.EmptySupportedRecyclerView
+        <io.github.karageageta.imagepicker.helper.EmptySupportedRecyclerView
             android:id="@+id/view_recycle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
