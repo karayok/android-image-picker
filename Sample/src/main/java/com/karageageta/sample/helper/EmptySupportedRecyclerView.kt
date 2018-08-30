@@ -18,7 +18,7 @@ class EmptySupportedRecyclerView @JvmOverloads constructor(
                 return
             }
 
-            val isEmpty = adapter.itemCount == 0
+            val isEmpty = adapter?.itemCount == 0
             emptyView?.visibility = if (isEmpty) View.VISIBLE else View.GONE
             visibility = if (isEmpty) View.GONE else View.VISIBLE
         }
