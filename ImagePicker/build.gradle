@@ -9,7 +9,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
-        versionName "0.1.0"
+        versionName "0.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -40,7 +40,7 @@ uploadArchives {
             repository url: "file://${projectDir}/repository"
             pom.groupId = 'KarageAgeta'
             pom.artifactId = 'android-image-picker'
-            pom.version = '0.1'
+            pom.version = '0.2'
         }
     }
 }
